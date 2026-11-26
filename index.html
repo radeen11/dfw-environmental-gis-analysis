@@ -96,6 +96,7 @@
       <option value="significant">Significant violation</option>
       <option value="unknown">Not reported / other</option>
     </select>
+    <div class="overlay-line"><label for="accuracy-filter"><input id="accuracy-filter" type="checkbox"> Limit to EPA coordinates with stated accuracy ≤100 m</label><p class="analysis-note">Excludes 52 of 300 records when enabled. This improves the positional-quality screen but is not a guarantee of survey-grade accuracy.</p></div>
     <div class="controls"><button id="reset" type="button" class="secondary">Clear filters</button><button type="button" id="fit">Show all markers</button></div>
     <div class="count" id="count" role="status" aria-live="polite">Loading EPA records…</div>
     <div class="legend" aria-label="Status legend">
@@ -105,7 +106,7 @@
       <div><span class="dot" style="background:#758ba7"></span>Unknown / other</div>
     </div>
     <div class="overlay-line"><label for="grid-toggle"><input type="checkbox" id="grid-toggle"> Show approximate 10 km facility-count grid</label><div id="grid-status" class="status" aria-live="polite" style="margin-top:.45rem">Grid off</div><p class="analysis-note">Cell counts reflect this extract only, not pollution intensity or risk. Grid uses approximate local kilometer scaling.</p></div>
-    <p class="disclaimer"><strong>Interpretation:</strong> TRI participation does not establish emissions at a specific time, human exposure, unsafe conditions, or violations. ECHO statuses may be missing or stale. Locations may be approximate; consult each source record.</p>
+    <p class="disclaimer"><strong>Interpretation:</strong> TRI participation does not establish emissions at a specific time, human exposure, unsafe conditions, or violations. ECHO statuses may be missing or stale. Some coordinates have extremely large uncertainty values. Filter to ≤100 m before fine-scale visual comparisons; these still do not establish site-level accuracy.</p>
   </aside>
   <section class="map-wrap" aria-label="Map and facility results">
     <div id="map" aria-label="Interactive map of EPA facility points"></div>
