@@ -88,6 +88,7 @@
     });
     tbody.appendChild(frag);
     $('#count').text(chosen.length + ' of ' + records.length + ' EPA sample facilities shown');
+    updateAnalysis(chosen);
     if (chosen.length === 0) {
       var tr = document.createElement('tr'), td = document.createElement('td');
       td.colSpan = 4; td.textContent = 'No matching facilities. Try different filters.';
@@ -114,6 +115,68 @@
     cities.forEach(function(city){ $city.append($('<option>').val(city).text(city));});
     render(); fit();
   }
+
+  // Spatial count overlay on an approximate 10 km equirectangular local grid.
+  // Not a distance-to-pollution or exposure model. Origin and constants are fixed for reproducibility.
+  var gridLayer = L.layerGroup().addTo(map);
+  var gridOriginLat = 32.55, gridOriginLon = -97.55;
+  var gridLatSpan = 10 / 111.2;
+  var gridLonSpan = 10 / (111.32 * Math.cos(32.95 * Math.PI / 180));
+
+  function gridKey(r) {
+    return [Math.floor((r.latitude-gridOriginLat)/gridLatSpan),
+            Math.floor((r.longitude-gridOriginLon)/gridLonSpan)].join(',');
+  }
+  function updateGrid(chosen) {
+    gridLayer.clearLayers();
+    if (!document.getElementById('grid-toggle').checked) return;
+    var cells = {};
+    chosen.forEach(function(r) {
+      var key = gridKey(r);
+      if (!cells[key]) cells[key] = 0;
+      cells[key]++;
+    });
+    Object.keys(cells).forEach(function(key) {
+      var xy = key.split(',').map(Number), count = cells[key];
+      var s = gridOriginLat+xy[0]*gridLatSpan, w = gridOriginLon+xy[1]*gridLonSpan;
+      L.rectangle([[s,w],[s+gridLatSpan,w+gridLonSpan]], {
+        color:'#703a90',weight:1.5,fillColor:'#8f63b4',
+        fillOpacity:Math.min(.13 + count*.045,.58)
+      }).bindPopup('<b>'+count+'</b> sampled facilities in this approximate 10 km grid cell. Not a risk estimate.')
+        .addTo(gridLayer);
+    });
+  }
+  function renderBars(target, entries, maxRows) {
+    var root = document.getElementById(target);
+    root.textContent = '';
+    if (!entries.length) { root.textContent = 'No matching records'; return; }
+    var highest = Math.max.apply(null,entries.map(function(x){return x[1];})) || 1;
+    entries.slice(0,maxRows).forEach(function(entry) {
+      var row = document.createElement('div');row.className='bar-row';
+      var label = document.createElement('span'); label.textContent=entry[0];
+      var track = document.createElement('div');track.className='bar-track';
+      var fill = document.createElement('div');fill.className='bar-fill';
+      fill.style.width=(100*entry[1]/highest)+'%';track.appendChild(fill);
+      var count = document.createElement('span');count.className='bar-count';count.textContent=entry[1];
+      row.appendChild(label);row.appendChild(track);row.appendChild(count);root.appendChild(row);
+    });
+  }
+  function updateAnalysis(chosen) {
+    var cities = {};
+    chosen.forEach(function(r){cities[r.city]=(cities[r.city]||0)+1;});
+    var cityCounts=Object.keys(cities).sort(function(a,b){return cities[b]-cities[a] || a.localeCompare(b);})
+      .map(function(k){return [k,cities[k]];});
+    var flags=[['Air (CAA)','air_flag'],['Water (NPDES)','npdes_flag'],['Waste (RCRA)','rcra_flag']]
+      .map(function(pair){return [pair[0],chosen.filter(function(r){return r[pair[1]]==='Y';}).length];});
+    $('#stat-facilities').text(chosen.length);
+    $('#stat-cities').text(Object.keys(cities).length);
+    $('#stat-accuracy').text(chosen.filter(function(r){return r.coordinate_accuracy_meters !== '' && Number(r.coordinate_accuracy_meters)>100;}).length);
+    renderBars('chart-cities',cityCounts,7);
+    renderBars('chart-programs',flags,3);
+    updateGrid(chosen);
+  }
+  $('#grid-toggle').on('change',function(){updateGrid(filtered());});
+
   $('#search').on('input',render);
   $('#city,#program,#status').on('change',render);
   $('#reset').on('click',function(){ $search.val('');$city.val('');$program.val('');$status.val('');render();fit();});
