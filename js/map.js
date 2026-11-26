@@ -87,7 +87,7 @@
       frag.appendChild(tr);
     });
     tbody.appendChild(frag);
-    $('#count').text(chosen.length + ' of ' + records.length + ' EPA sample facilities shown');
+    $('#count').text(chosen.length + ' of ' + records.length + ' EPA facilities shown');
     updateAnalysis(chosen);
     if (chosen.length === 0) {
       var tr = document.createElement('tr'), td = document.createElement('td');
@@ -193,7 +193,7 @@
   $('#city,#program,#status').on('change',render);
   $('#reset').on('click',function(){ $search.val('');$city.val('');$program.val('');$status.val('');render();fit();});
   $('#fit').on('click',fit);
-  $.ajax({url:'data/dfw-epa-tri-facilities-sample.csv',dataType:'text',cache:false})
+  $.ajax({url:'data/dfw-epa-tri-facilities-complete.csv',dataType:'text',cache:false})
     .done(load)
     .fail(function(){
       $('#count').text('Unable to load the EPA dataset.');
