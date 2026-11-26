@@ -1,6 +1,6 @@
 # DFW Industrial Facilities GIS — Project Plan
 
-**Status:** Initial setup. The live map currently contains the original Chicago demonstration data; no Dallas–Fort Worth environmental conclusions have been made yet.
+**Status:** Interactive map code and first EPA data sample are committed. GitHub Pages publication and browser testing are pending. No environmental risk assessment has been made.
 
 ## Research question
 
@@ -15,11 +15,11 @@ Where are EPA-listed industrial facilities located in the Dallas–Fort Worth re
 ## Tasks
 
 - [x] Fork and review the original open-source mapping template.
-- [ ] Download a reproducible subset of EPA facility records for the DFW area.
-- [ ] Document the dataset's extraction date, columns, geographic filters, and limitations.
-- [ ] Replace the Chicago sample dataset with the cleaned DFW EPA dataset.
-- [ ] Configure map location, labels, tables, search, and facility popups.
-- [ ] Remove or replace the template's Google API dependency to avoid requiring a billed API key.
+- [x] Download a reproducible subset of EPA facility records for the DFW area.
+- [x] Document the dataset's extraction date, columns, geographic filters, and limitations.
+- [x] Replace the Chicago sample dataset with the cleaned DFW EPA dataset.
+- [x] Configure map location, labels, tables, search, and facility popups.
+- [x] Remove or replace the template's Google API dependency to avoid requiring a billed API key.
 - [ ] Test map functionality and accessibility.
 - [ ] Publish via GitHub Pages.
 - [ ] Add a final methodology, results, limitations, and screenshots.
