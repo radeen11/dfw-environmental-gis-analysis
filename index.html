@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="An independently developed interactive map exploring a 300-record extract of EPA ECHO TRI-flagged facilities in the Dallas–Fort Worth area.">
-  <title>DFW Industrial Facilities | EPA ECHO GIS Portfolio</title>
+  <meta name="description" content="Interactive map of EPA ECHO facility records in the Dallas–Fort Worth study area, with a TRI-associated snapshot and a latest-inspection-year view.">
+  <title>DFW EPA Facility Records | GIS Explorer</title>
   <link rel="stylesheet" href="css/leaflet.css">
   <style>
     :root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#e6edf5;background:#111823}
@@ -71,22 +71,22 @@
 <body>
 <a class="skip" href="#filters">Skip to filters</a>
 <header class="header">
-  <h1>DFW Industrial Facilities: EPA ECHO Map</h1>
-  <p class="sub"><span class="pill">Independent GIS portfolio project</span> Interactive geographic explorer of 300 TRI-flagged facility records from the U.S. EPA ECHO public database.</p>
-  <p class="sub">A complete extract for the defined rectangular study area rather than a metropolitan-wide inventory or an environmental risk assessment.</p>
+  <h1>Dallas–Fort Worth EPA Facility Explorer</h1>
+  <p class="sub"><span class="pill">Independent GIS portfolio project</span> Explore locations and reported regulatory information from the U.S. EPA Enforcement and Compliance History Online (ECHO) database.</p>
+  <p class="sub">Choose between a November 2026 snapshot of 300 TRI-associated facility records and facilities grouped by the year of their latest EPA-recorded inspection. Both views use a defined DFW-area rectangle, not official metropolitan boundaries.</p>
 </header>
 <main class="layout">
   <aside id="filters" aria-label="Facility filters">
-    <h2>Explore facilities</h2>
-    <label for="dataset-mode">Dataset scope</label>
+    <h2>Explore EPA records</h2>
+    <label for="dataset-mode">Choose a dataset</label>
     <select id="dataset-mode">
-      <option value="tri">TRI-associated EPA facilities — 300 recorded points</option>
-      <option value="all">All EPA ECHO — last-inspection year</option>
+      <option value="tri">TRI-associated facilities (Nov. 2026 snapshot)</option>
+      <option value="all">Facilities by latest inspection year (live EPA data)</option>
     </select>
-    <p id="scope-description" class="analysis-note" aria-live="polite">Complete 300-record TRI-flagged point extract for the study rectangle, collected November 26, 2026.</p>
-    <p id="all-mode-notice" class="analysis-note" hidden>All ECHO year mode loads <strong>every qualifying facility for the selected last-inspection year</strong> within the study rectangle in pages. For performance, the map uses the grid instead of individual markers when more than 1,500 match. The table shows up to 250 entries, but totals and charts include every qualifying record. ECHO data does not include every possible permit, every historical violation, or every industrial site.</p>
+    <p id="scope-description" class="analysis-note" aria-live="polite">300 EPA ECHO facility records with a TRI program flag, retrieved November 26, 2026. This is not a list of every industrial facility or every chemical release.</p>
+    <p id="all-mode-notice" class="analysis-note" hidden>EPA is queried for facilities whose <strong>most recent recorded inspection date</strong> falls in the selected year. The year view is not a count of inspections performed that year or of facilities operating then. All matching records are requested; when many match, the map aggregates them into grid cells.</p>
     <div id="inspection-year-wrap" hidden>
-      <label for="inspection-year">Year of last recorded inspection</label>
+      <label for="inspection-year">Year of latest recorded inspection</label>
       <select id="inspection-year">
         <option value="2026">2026 (year to date)</option>
         <option value="2025" selected>2025</option>
@@ -99,67 +99,67 @@
         <option value="2018">2018</option>
         <option value="2017">2017</option>
       </select>
-      <p class="analysis-note">This selects facilities whose <em>latest inspection recorded by EPA</em> falls in the chosen year. It is <strong>not</strong> a census of every facility operating that year, and excludes facilities without a recorded last-inspection date.</p>
+      <p class="analysis-note">A facility appears in the year of its <em>latest recorded inspection</em>, not in every year it was inspected. Facilities without a reported date are excluded from this view. This is not a Census-year or operating-facility inventory.</p>
     </div>
-    <label for="search">Find by facility name or address</label>
-    <input id="search" type="search" placeholder="e.g. Carrollton or Sherwin">
-    <label for="city">City</label>
+    <label for="search">Search facility name, city, address, or EPA ID</label>
+    <input id="search" type="search" placeholder="e.g. Garland, Sherwin, or EPA ID">
+    <label for="city">Reported city</label>
     <select id="city"><option value="">All cities</option></select>
-    <label for="program">EPA regulatory program</label>
+    <label for="program">EPA program association</label>
     <select id="program">
-      <option value="">Any recorded program</option>
-      <option value="air_flag">Clean Air Act (air flag)</option>
-      <option value="npdes_flag">Clean Water Act / NPDES</option>
-      <option value="rcra_flag">RCRA waste program</option>
+      <option value="">All program associations</option>
+      <option value="air_flag">Clean Air Act (CAA)</option>
+      <option value="npdes_flag">Clean Water Act (NPDES)</option>
+      <option value="rcra_flag">Resource Conservation and Recovery Act (RCRA)</option>
     </select>
-    <label for="status">EPA-reported compliance status</label>
+    <label for="status">ECHO-reported compliance classification</label>
     <select id="status">
-      <option value="">All statuses</option>
+      <option value="">All reported classifications</option>
       <option value="no">No violation identified</option>
-      <option value="violation">Violation identified / violation</option>
+      <option value="violation">Violation / violation identified</option>
       <option value="significant">Significant violation</option>
-      <option value="unknown">Not reported / other</option>
+      <option value="unknown">Unknown or not reported</option>
     </select>
-    <div class="overlay-line"><label for="accuracy-filter"><input id="accuracy-filter" type="checkbox"> Limit to EPA coordinates with stated accuracy ≤100 m</label><p id="accuracy-explanation" class="analysis-note">In TRI mode, removes 52 of the 300 saved points. This filters by reported coordinate precision, not geographic clustering or pollution.</p></div>
-    <div class="controls"><button id="reset" type="button" class="secondary">Clear filters</button><button type="button" id="fit">Show all markers</button></div>
+    <div class="overlay-line"><label for="accuracy-filter"><input id="accuracy-filter" type="checkbox"> Show only locations with reported accuracy of 100 m or better</label><p id="accuracy-explanation" class="analysis-note">Filters by EPA-reported positional accuracy. In the TRI snapshot, 52 records exceed 100 m and will be hidden. It does not filter by pollution severity or facility clustering.</p></div>
+    <div class="controls"><button id="reset" type="button" class="secondary">Reset search and filters</button><button type="button" id="fit">Fit visible locations</button></div>
     <div class="count" id="count" role="status" aria-live="polite">Loading EPA records…</div>
     <div class="legend" aria-label="Status legend">
-      <strong>Marker colors</strong><div><span class="dot" style="background:#397b63"></span>No violation identified</div>
+      <strong>Marker colors: ECHO classifications</strong><div><span class="dot" style="background:#397b63"></span>No violation identified</div>
       <div><span class="dot" style="background:#dd9845"></span>Violation</div>
       <div><span class="dot" style="background:#d64b52"></span>Significant violation</div>
       <div><span class="dot" style="background:#758ba7"></span>Unknown / other</div>
     </div>
-    <div class="overlay-line"><label for="grid-toggle"><input type="checkbox" id="grid-toggle"> Show approximate 10 km facility-count grid</label><div id="grid-status" class="status" aria-live="polite" style="margin-top:.45rem">Grid off</div><p class="analysis-note">Cell counts reflect this extract only, not pollution intensity or risk. Grid uses approximate local kilometer scaling.</p></div>
-    <p class="disclaimer"><strong>Interpretation:</strong> TRI participation does not establish emissions at a specific time, human exposure, unsafe conditions, or violations. ECHO statuses may be missing or stale. Some coordinates have extremely large uncertainty values. Filter to ≤100 m before fine-scale visual comparisons; these still do not establish site-level accuracy.</p>
+    <div class="overlay-line"><label for="grid-toggle"><input type="checkbox" id="grid-toggle"> Show approximate 10 km grid of facility counts</label><div id="grid-status" class="status" aria-live="polite" style="margin-top:.45rem">Grid off</div><p class="analysis-note">Purple cells count matching facility locations; darker cells contain more records. Cells are approximately 10 km across and do not represent emissions or health risks.</p></div>
+    <p class="disclaimer"><strong>Data limitations:</strong> Being listed in ECHO, including a TRI association, does not establish pollution, exposure, wrongdoing, or risk. Classifications may be incomplete or outdated, and mapped positions can be approximate. Check the linked EPA record before drawing conclusions.</p>
   </aside>
   <section class="map-wrap" aria-label="Map and facility results">
     <div id="map" aria-label="Interactive map of EPA facility points"></div>
     <section class="analysis-section" aria-labelledby="analysis-title">
-      <h2 id="analysis-title">Facility analysis dashboard</h2>
-      <p class="analysis-note" id="analysis-scope">Counts update with filters. This extract includes all matching TRI-flagged ECHO points inside the defined rectangle, but it is not a count of all industrial facilities or a standardized comparison across municipalities.</p>
+      <h2 id="analysis-title">Facility records summary</h2>
+      <p class="analysis-note" id="analysis-scope">Counts reflect the selected TRI snapshot and active filters, not all industrial facilities in the region.</p>
       <div class="summary-stats">
-        <div class="stat"><strong id="stat-facilities">—</strong><span>ECHO records matching filters</span></div>
-        <div class="stat"><strong id="stat-cities">—</strong><span>Cities represented</span></div>
-        <div class="stat"><strong id="stat-accuracy">—</strong><span>Coordinates with stated accuracy over 100 m</span></div>
+        <div class="stat"><strong id="stat-facilities">—</strong><span>Facility records matching filters</span></div>
+        <div class="stat"><strong id="stat-cities">—</strong><span>Reported cities represented</span></div>
+        <div class="stat"><strong id="stat-accuracy">—</strong><span>Records with reported accuracy worse than 100 m</span></div>
       </div>
       <div class="chart-row">
-        <div class="chart"><h3>Top cities by extracted facility count</h3><div id="chart-cities" role="img" aria-label="Bar chart of selected facility counts by city"></div></div>
-        <div class="chart"><h3>EPA program flags (overlap allowed)</h3><div id="chart-programs" role="img" aria-label="Bar chart of EPA program flags"></div></div>
+        <div class="chart"><h3>Top reported cities by record count</h3><div id="chart-cities" role="img" aria-label="Bar chart of selected facility counts by city"></div></div>
+        <div class="chart"><h3>EPA program associations</h3><div id="chart-programs" role="img" aria-label="Bar chart of EPA program flags"></div></div>
       </div>
-      <p class="analysis-note">Program categories are not exclusive: a facility may appear in multiple bars. The grid overlay shows counts in approximate 10 km cells—not normalized for facility type, land area, population, or time.</p>
-      <p><a href="ANALYSIS.md">Read the statistical methods, interpretation and limitations</a></p>
+      <p class="analysis-note">A facility may be linked to multiple EPA programs. These are counts of records, not emissions, violation rates, or population-adjusted comparisons. Grid cells aggregate locations; their area is approximate.</p>
+      <p><a href="ANALYSIS.md">Read data sources, methods, and limitations</a></p>
     </section>
     <div class="table-section">
-      <h2>Matching records</h2>
-      <p class="status" id="table-explainer">The table lists up to the first 250 matching records. Select a facility to zoom to its location. The rectangle is not a metropolitan boundary and points may be approximate.</p>
+      <h2>Facility records</h2>
+      <p class="status" id="table-explainer">Select a facility name to locate it on the map. Long result sets show the first 250 table rows; summaries still use all matching records.</p>
       <div style="overflow-x:auto">
-        <table><thead><tr><th scope="col">Facility</th><th scope="col">City</th><th scope="col">Reported status</th><th scope="col">EPA source</th></tr></thead><tbody id="results"></tbody></table>
+        <table><thead><tr><th scope="col">Facility</th><th scope="col">City</th><th scope="col">ECHO classification</th><th scope="col">EPA source</th></tr></thead><tbody id="results"></tbody></table>
       </div>
     </div>
   </section>
 </main>
 <footer>
-  Data: <a href="https://echo.epa.gov/">U.S. EPA ECHO</a> (retrieved Nov 26, 2026; 300 records for the study rectangle).
+  Data: <a href="https://echo.epa.gov/">U.S. EPA ECHO</a>. TRI snapshot retrieved November 26, 2026; inspection-year view queries the current EPA service.
   <a href="DATA_SOURCE.md">Dataset source and limitations</a> ·
   <a href="https://github.com/radeen11/dfw-environmental-gis-analysis">Source repository</a>.
   Map uses <a href="https://leafletjs.com/">Leaflet</a> and <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>.
@@ -168,6 +168,6 @@
 <script src="lib/jquery-3.3.1.min.js"></script>
 <script src="lib/jquery.csv.min.js"></script>
 <script src="lib/leaflet.js"></script>
-<script src="js/dfw-map-inspection-year.js"></script>
+<script src="js/dfw-map-copy-reviewed.js"></script>
 </body>
 </html>
