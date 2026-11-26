@@ -118,6 +118,11 @@
 
   // Spatial count overlay on an approximate 10 km equirectangular local grid.
   // Not a distance-to-pollution or exposure model. Origin and constants are fixed for reproducibility.
+  // Draw polygons in a separate visible pane above the marker SVG pane.
+  // pointer-events:none preserves clicking facility circles below the grid.
+  map.createPane('facilityGrid');
+  map.getPane('facilityGrid').style.zIndex = 450;
+  map.getPane('facilityGrid').style.pointerEvents = 'none';
   var gridLayer = L.layerGroup().addTo(map);
   var gridOriginLat = 32.55, gridOriginLon = -97.55;
   var gridLatSpan = 10 / 111.2;
@@ -129,7 +134,12 @@
   }
   function updateGrid(chosen) {
     gridLayer.clearLayers();
-    if (!document.getElementById('grid-toggle').checked) return;
+    var toggle = document.getElementById('grid-toggle');
+    var gridStatus = document.getElementById('grid-status');
+    if (!toggle.checked) {
+      gridStatus.textContent = 'Grid off';
+      return;
+    }
     var cells = {};
     chosen.forEach(function(r) {
       var key = gridKey(r);
@@ -140,10 +150,13 @@
       var xy = key.split(',').map(Number), count = cells[key];
       var s = gridOriginLat+xy[0]*gridLatSpan, w = gridOriginLon+xy[1]*gridLonSpan;
       L.rectangle([[s,w],[s+gridLatSpan,w+gridLonSpan]], {
-        color:'#703a90',weight:1.5,fillColor:'#8f63b4',
-        fillOpacity:Math.min(.13 + count*.045,.58), interactive:false
+        pane:'facilityGrid', color:'#bb5cfa', weight:2.4, opacity:1,
+        fillColor:'#9853dc', fillOpacity:Math.min(.30 + count*.09,.78),
+        interactive:false
       }).addTo(gridLayer);
     });
+    gridStatus.textContent = 'Grid on: ' + Object.keys(cells).length +
+      ' occupied cells (approx. 10 km each)';
   }
   function renderBars(target, entries, maxRows) {
     var root = document.getElementById(target);
