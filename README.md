@@ -6,7 +6,8 @@ A public environmental GIS portfolio project that adapted the MIT-licensed [Data
 
 ## What it does
 
-- Maps all **300 records** that match a verified, paginated EPA ECHO query; links every point to its EPA facility report.
+- Offers a choice between a **complete 300-record TRI-associated snapshot** and **live searches of all EPA ECHO-listed facilities** in the same study rectangle. The all-ECHO mode reports the exact matching total and renders **up to 300 first-matching points** per query, not the full universe of points or comprehensive all-ECHO charts.
+- Maps all 300 TRI snapshot records and links every point to its EPA facility report.
 - Searches facility names, addresses, registry IDs and city names, with regulatory program and compliance-status filters.
 - Displays filter-responsive city/program bar charts and a summary of record and coordinate-quality counts.
 - Aggregates selected points into an optional **approximate 10 km square grid** for spatial pattern exploration.
@@ -48,7 +49,7 @@ A public environmental GIS portfolio project that adapted the MIT-licensed [Data
 
 ## Limitations and ethics
 
-The study rectangle is not the official DFW metro area; city counts are not normalized by population or municipal area. Grid sizes are approximate, not computed in a projected CRS. Some point positions have considerable reported uncertainty, and a GIS pin is not proof of an exact industrial discharge location. Program associations and ECHO statuses do not alone indicate harm or exposure. No scientific causal or health-risk analysis is claimed.
+EPA returned 34,152 all-ECHO records in the rectangle on November 26, 2026, but the live all-ECHO map **shows only up to 300 matches** at once for speed, with charts describing only those visible records. Results are ordered by registry ID, not a representative sample. The study rectangle is not the official DFW metro area; city counts are not normalized by population or municipal area. Grid sizes are approximate, not computed in a projected CRS. Some point positions have considerable reported uncertainty, and a GIS pin is not proof of an exact industrial discharge location. Program associations and ECHO statuses do not alone indicate harm or exposure. No scientific causal or health-risk analysis is claimed.
 
 ## Original software attribution
 
