@@ -1,35 +1,32 @@
-# DFW Industrial Facilities GIS — Project Plan
+# DFW Industrial Facilities GIS — Completion Checklist
 
-**Status:** Website deployed and initial map, filters, and popups tested by the user on November 26, 2026. The newer spatial grid and charts have been committed but require separate browser testing. No environmental risk assessment has been made.
+**Project:** Public GitHub Pages map of EPA ECHO TRI-associated facilities.  
+**Source:** DataMade MIT-licensed searchable map template, heavily customized.
 
-## Research question
+## Completed
 
-Where are EPA-listed industrial facilities located in the Dallas–Fort Worth region, and what documented facility attributes can be compared spatially? Facility presence or proximity alone must **not** be interpreted as proof of exposure, contamination, or health risk.
+- [x] Fork the original map with attribution and preserved LICENSE.
+- [x] Identify official ECHO FeatureServer point data and project scope.
+- [x] Query total count and paginate **all 300 qualifying records** inside study rectangle.
+- [x] Validate unique FRS registry IDs and nonmissing in-extent coordinates.
+- [x] Commit the full dataset, archive pilot, document field mapping and write a reproducible Python extractor.
+- [x] Add interactive searchable Leaflet map and links to ECHO facility reports.
+- [x] Replace Google Maps dependencies with OpenStreetMap tiles.
+- [x] Implement city, regulatory-program and compliance filters.
+- [x] Add dynamic chart summaries and approximate 10 km grid aggregation.
+- [x] Add location quality warnings and a ≤100 m coordinate-accuracy filter.
+- [x] Publish on GitHub Pages.
+- [x] Write full research report (ANALYSIS.md) and public README.
+- [x] User verified earlier 75-point map, filters, charts and grid in Safari.
 
-## Proposed sources
+## Remaining checks before final résumé inclusion
 
-- U.S. EPA [ECHO Data Downloads](https://echo.epa.gov/tools/data-downloads)
-- U.S. EPA [Facility Registry Service](https://www.epa.gov/frs)
-- U.S. Census Bureau geographic boundaries, if needed
+- [ ] Refresh GitHub Pages and confirm it now displays **300 of 300 facilities** with no console errors.
+- [ ] Toggle the **≤100 m coordinate accuracy** filter: full 300 should reduce to 248 with no additional filters.
+- [ ] Confirm map markers, search, grid and bar charts update correctly with 300 records.
+- [ ] Verify mobile layout and external EPA links.
+- [ ] Optionally capture a screenshot of the finalized dashboard for README.
 
-## Tasks
+## Scope warning
 
-- [x] Fork and review the original open-source mapping template.
-- [x] Download a reproducible subset of EPA facility records for the DFW area.
-- [x] Document the dataset's extraction date, columns, geographic filters, and limitations.
-- [x] Replace the Chicago sample dataset with the cleaned DFW EPA dataset.
-- [x] Configure map location, labels, tables, search, and facility popups.
-- [x] Remove or replace the template's Google API dependency to avoid requiring a billed API key.
-- [x] User-tested baseline marker rendering, filtering, search, and facility popup.
-- [ ] Test newly added analysis charts, grid toggle, and small-screen accessibility.
-- [x] Publish via GitHub Pages.
-- [x] Add sample-based methodology, results, limitations, and spatial grid methods in ANALYSIS.md.
-- [ ] Add final project screenshots and a complete, less-biased EPA facility inventory.
-
-## Attribution
-
-Based on [DataMade's Searchable Map Template – CSV](https://github.com/datamade/searchable-map-template-csv), itself based on work by Derek Eder. The original software is MIT-licensed; preserve the repository's LICENSE and required copyright notice.
-
-## Portfolio classification
-
-Independent GIS portfolio project, using an attributed open-source web mapping template and official public data. Do not represent it as employer work or an official EPA risk assessment.
+This is **complete for the defined rectangular EPA TRI query** on Nov 26, 2026, not a comprehensive inventory of all industrial facilities or an official DFW region boundary. The grid is exploratory and approximate, not a pollution or health-risk estimate.
