@@ -64,7 +64,7 @@ To investigate **all inspections that happened during a given year**, historical
 
 **Confirmed:** A live browser previously verified the fixed TRI snapshot at **300/300** records, the 64-cell spatial grid, and the coordinate-accuracy filter reducing records to **248/300**.
 
-**Still to confirm:** End-to-end testing of the **latest inspection-year view on the currently deployed website**, including its count, map markers, year switching, and source connections. The year-based EPA query was validated separately, but the new browser workflow should not be called verified until observed. This is a portfolio project, not a production environmental reporting service.
+**Latest live-browser verification (November 26, 2026):** The published page displayed the new title; the fixed TRI view loaded **300** records; switching to **latest inspection year 2025** loaded **131 of 131** matching records with facility markers and both summary charts visible. No issues were observed during these checks. Other inspection years, mobile layouts, and all combinations of filters have not been exhaustively tested. This is a portfolio project, not a production environmental reporting service.
 
 ## Limits, ethics, and attribution
 
