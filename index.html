@@ -60,6 +60,7 @@
     .bar-track{background:#34465a;border-radius:5px;overflow:hidden;height:13px}
     .bar-fill{background:#80b3d6;height:100%}
     .bar-count{text-align:right;font-variant-numeric:tabular-nums}
+    [hidden]{display:none!important}
     .overlay-line{margin:1rem 0;padding:.7rem;border:1px solid #63768c;border-radius:6px}
     .overlay-line label{display:inline;font-size:.88rem;font-weight:500}
     .overlay-line input{width:auto;min-height:auto;vertical-align:middle;margin-right:.3rem}
@@ -77,6 +78,13 @@
 <main class="layout">
   <aside id="filters" aria-label="Facility filters">
     <h2>Explore facilities</h2>
+    <label for="dataset-mode">Dataset scope</label>
+    <select id="dataset-mode">
+      <option value="tri">TRI-associated EPA facilities — 300 recorded points</option>
+      <option value="all">All EPA ECHO-listed facilities — live search</option>
+    </select>
+    <p id="scope-description" class="analysis-note" aria-live="polite">Complete 300-record TRI-flagged point extract for the study rectangle, collected November 26, 2026.</p>
+    <p id="all-mode-notice" class="analysis-note" hidden>The EPA lists tens of thousands of records in this area. This mode queries current records directly and shows <strong>up to 300 matching locations per search</strong>, with the full matching total displayed separately. Use city, facility text, or regulatory-status filters to narrow results. The 300 preview records are not a statistically representative sample.</p>
     <label for="search">Find by facility name or address</label>
     <input id="search" type="search" placeholder="e.g. Carrollton or Sherwin">
     <label for="city">City</label>
@@ -112,7 +120,7 @@
     <div id="map" aria-label="Interactive map of EPA facility points"></div>
     <section class="analysis-section" aria-labelledby="analysis-title">
       <h2 id="analysis-title">Facility analysis dashboard</h2>
-      <p class="analysis-note">Counts update with filters. This extract includes all matching TRI-flagged ECHO points inside the defined rectangle, but it is not a count of all industrial facilities or a standardized comparison across municipalities.</p>
+      <p class="analysis-note" id="analysis-scope">Counts update with filters. This extract includes all matching TRI-flagged ECHO points inside the defined rectangle, but it is not a count of all industrial facilities or a standardized comparison across municipalities.</p>
       <div class="summary-stats">
         <div class="stat"><strong id="stat-facilities">—</strong><span>ECHO records matching filters</span></div>
         <div class="stat"><strong id="stat-cities">—</strong><span>Cities represented</span></div>
@@ -144,6 +152,6 @@
 <script src="lib/jquery-3.3.1.min.js"></script>
 <script src="lib/jquery.csv.min.js"></script>
 <script src="lib/leaflet.js"></script>
-<script src="js/dfw-map-300.js"></script>
+<script src="js/dfw-map-dual.js"></script>
 </body>
 </html>
