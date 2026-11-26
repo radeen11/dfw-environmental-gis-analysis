@@ -101,4 +101,4 @@ Relevant EPA guidance: [ECHO Map Service](https://echo.epa.gov/tools/map-service
 - Responsive filter-aware charts and aggregation grid.
 - Public GitHub Pages deployment and maintained methodology.
 
-See [README.md](README.md) for the live website and attribution. The initial visual map and its filters/popup were user-tested; the 300-record update and added accuracy filter require refreshed browser confirmation.
+See [README.md](README.md) for the live website and attribution. The initial map search, filters and popups were user-tested. The completed 300-record live deployment was subsequently browser-tested: map count 300/300, 64 occupied grid cells, and the ≤100 m accuracy screen reduced the map to 248/300 records and 61 occupied cells, with charts updating accordingly.
