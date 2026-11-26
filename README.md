@@ -6,7 +6,7 @@ A public environmental GIS portfolio project that adapted the MIT-licensed [Data
 
 ## What it does
 
-- Offers a choice between a **complete 300-record TRI-associated snapshot** and **live searches of all EPA ECHO-listed facilities** in the same study rectangle. The all-ECHO mode reports the exact matching total and renders **up to 300 first-matching points** per query, not the full universe of points or comprehensive all-ECHO charts.
+- Offers a complete 300-record TRI-associated snapshot and an **all-ECHO mode that downloads every matching facility record in the study rectangle**; the map aggregates large results into a grid, and lists at most 250 table rows while computing full-data statistics.
 - Maps all 300 TRI snapshot records and links every point to its EPA facility report.
 - Searches facility names, addresses, registry IDs and city names, with regulatory program and compliance-status filters.
 - Displays filter-responsive city/program bar charts and a summary of record and coordinate-quality counts.
@@ -49,7 +49,7 @@ A public environmental GIS portfolio project that adapted the MIT-licensed [Data
 
 ## Limitations and ethics
 
-EPA returned 34,152 all-ECHO records in the rectangle on November 26, 2026, but the live all-ECHO map **shows only up to 300 matches** at once for speed, with charts describing only those visible records. Results are ordered by registry ID, not a representative sample. The study rectangle is not the official DFW metro area; city counts are not normalized by population or municipal area. Grid sizes are approximate, not computed in a projected CRS. Some point positions have considerable reported uncertainty, and a GIS pin is not proof of an exact industrial discharge location. Program associations and ECHO statuses do not alone indicate harm or exposure. No scientific causal or health-risk analysis is claimed.
+EPA returned 34,152 all-ECHO records in the rectangle on November 26, 2026. The live site requests every matching record with pagination and requires successful complete validation. The study rectangle is not the official DFW metro area;
 
 ## Original software attribution
 
@@ -58,3 +58,12 @@ Originally forked from [DataMade's Searchable Map Template — CSV](https://gith
 Map uses Leaflet and © OpenStreetMap contributors; facility records from the U.S. Environmental Protection Agency. This is an independent personal portfolio project, not affiliated with EPA.
 
 **Verification:** The live 300-record deployment was browser-tested on November 26, 2026: 300/300 facility markers and charts loaded; the 10 km grid displayed 64 occupied cells; enabling the ≤100 m positional-quality filter reduced the map to 248/300 records and 61 occupied grid cells. Earlier search, status filters and popups were also tested by the project owner.
+
+
+## Complete all-ECHO mode (November 26, 2026 revision)
+
+The **All EPA ECHO** selection no longer limits the data to the first 300 records. It requests the current total, then pages through **every record** matching the geographic rectangle from the public EPA ArcGIS FeatureServer, using 1,000 records per request with up to four concurrent requests. All pages must return the expected number of records, and the combined set must have distinct FRS identifiers and valid in-rectangle coordinates. If verification fails, the site shows an error instead of presenting a truncated dataset as complete.
+
+Once loaded, filters, city charts, regulatory-program counts, compliance counts and 10 km grid aggregation operate on **all downloaded ECHO records**. For browser performance, an overview with over 1,500 matches displays an aggregate grid instead of thousands of point icons. Narrower selections render all corresponding markers. The results table is deliberately capped at the first 250 entries while its counts and charts include every matching record. The live ECHO number can differ from the 34,152-record count checked on November 26, 2026.
+
+**Critical scope distinction:** "All ECHO" means all facility records **in the ECHO All Facilities layer that match this rectangular spatial selection at query time**. It does not mean all environmental datasets, all historical violations, all facilities outside this rectangle, or all regulated entities ever recorded. Dates and compliance categories reflect EPA's source, not independently established current legal status. EPA's database may change during a multi-page live query, which can cause validation failure and require retry.
