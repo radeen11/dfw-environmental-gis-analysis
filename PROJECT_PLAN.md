@@ -21,11 +21,11 @@
 
 ## Remaining checks before final résumé inclusion
 
-- [ ] Refresh GitHub Pages and confirm it now displays **300 of 300 facilities** with no console errors.
-- [ ] Toggle the **≤100 m coordinate accuracy** filter: full 300 should reduce to 248 with no additional filters.
-- [ ] Confirm map markers, search, grid and bar charts update correctly with 300 records.
-- [ ] Verify mobile layout and external EPA links.
-- [ ] Optionally capture a screenshot of the finalized dashboard for README.
+- [x] Live browser test confirmed **300 of 300 facilities** on GitHub Pages without observed page errors.
+- [x] Verified **≤100 m coordinate-accuracy filter** reduces 300 records to **248**.
+- [x] Confirmed facility markers, 64-cell grid, data chart counts, and grid/chart updates after accuracy filter; search and attribute filters were user-tested on the initial version.
+- [ ] Optional final mobile viewport review and periodic recheck of external EPA links.
+- [ ] Optional screenshot of finalized 300-record dashboard for README.
 
 ## Scope warning
 
