@@ -141,9 +141,8 @@
       var s = gridOriginLat+xy[0]*gridLatSpan, w = gridOriginLon+xy[1]*gridLonSpan;
       L.rectangle([[s,w],[s+gridLatSpan,w+gridLonSpan]], {
         color:'#703a90',weight:1.5,fillColor:'#8f63b4',
-        fillOpacity:Math.min(.13 + count*.045,.58)
-      }).bindPopup('<b>'+count+'</b> sampled facilities in this approximate 10 km grid cell. Not a risk estimate.')
-        .addTo(gridLayer);
+        fillOpacity:Math.min(.13 + count*.045,.58), interactive:false
+      }).addTo(gridLayer);
     });
   }
   function renderBars(target, entries, maxRows) {
