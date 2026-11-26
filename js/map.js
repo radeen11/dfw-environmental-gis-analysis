@@ -8,7 +8,7 @@
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 19
   }).addTo(map);
-  var markerLayer = L.layerGroup().addTo(map);
+  var markerLayer = L.featureGroup().addTo(map);
   var records = [];
   var markers = new Map();
   var $search = $('#search'), $city = $('#city'), $program = $('#program'), $status = $('#status');
