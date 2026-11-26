@@ -25,4 +25,4 @@ To refresh the CSV, rerun the query, retain the mapped fields above and normaliz
 
 Sources: [EPA ECHO map services](https://echo.epa.gov/tools/map-service), [EPA TRI reporting](https://www.epa.gov/toxics-release-inventory-tri-program/reporting-tri-facilities), [EPA TRI limitations](https://www.epa.gov/trinationalanalysis/tri-data-considerations).
 
-**Status:** Dataset is imported and connected to a Leaflet/OpenStreetMap map with filters. GitHub Pages publication and end-to-end browser verification are still pending.
+**Status:** Map is published on GitHub Pages. Baseline controls were user-tested November 26, 2026. Newly added dashboard/grid features need a fresh check. See [ANALYSIS.md](ANALYSIS.md) for descriptive counts and spatial methods.
