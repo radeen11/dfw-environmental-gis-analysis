@@ -40,13 +40,11 @@ For analytical methods, see [ANALYSIS.md](ANALYSIS.md). For full EPA context, se
 `data/dfw-epa-tri-facilities-sample.csv` remains as an archived first-page pilot extract; **the live map now loads the 300-row complete file**. Use the 300-row file and analysis report for portfolio claims.
 
 
-## Optional live all-ECHO search mode (added Nov 26, 2026)
 
-The web app now offers two data scopes:
+## Complete all-ECHO mode (November 26, 2026 revision)
 
-1. **TRI-associated snapshot:** complete 300-record EPA query in the geographic rectangle, saved as CSV and fully represented in charts.
-2. **All ECHO-listed facilities:** a **live** remote ArcGIS API query with `where=1=1` plus filters, for the same rectangle. EPA reported **34,152** records for the unfiltered rectangle in a live `returnCountOnly=true` request on November 26, 2026. That total may change on later visits.
+The **All EPA ECHO** selection no longer limits the data to the first 300 records. It requests the current total, then pages through **every record** matching the geographic rectangle from the public EPA ArcGIS FeatureServer, using 1,000 records per request with up to four concurrent requests. All pages must return the expected number of records, and the combined set must have distinct FRS identifiers and valid in-rectangle coordinates. If verification fails, the site shows an error instead of presenting a truncated dataset as complete.
 
-**Performance and disclosure:** In all-ECHO mode, the site displays the **first 300 matching records sorted by `registry_id`** to keep browser memory and map rendering reasonable; the counter reports the full matching EPA record count. The map and dashboard charts for this mode show **only the displayed preview records**, NOT a statistically representative sample of all matching facilities. Filter by city, name, environmental program, compliance status, or source coordinate accuracy to narrow the live query. The browser requires Internet access to EPA's ArcGIS feature service and will show an error if the service is unavailable or its cross-origin policy prevents access. No all-facility raw dataset is stored in the repository.
+Once loaded, filters, city charts, regulatory-program counts, compliance counts and 10 km grid aggregation operate on **all downloaded ECHO records**. For browser performance, an overview with over 1,500 matches displays an aggregate grid instead of thousands of point icons. Narrower selections render all corresponding markers. The results table is deliberately capped at the first 250 entries while its counts and charts include every matching record. The live ECHO number can differ from the 34,152-record count checked on November 26, 2026.
 
-The all-ECHO scope includes a wider range of regulated facilities, potentially construction projects, schools, small operations and industrial facilities; **ECHO-listed does not mean industrial, toxic, violating, or unsafe**. ECHO data is incomplete for programs not tracked by the service.
+**Critical scope distinction:** "All ECHO" means all facility records **in the ECHO All Facilities layer that match this rectangular spatial selection at query time**. It does not mean all environmental datasets, all historical violations, all facilities outside this rectangle, or all regulated entities ever recorded. Dates and compliance categories reflect EPA's source, not independently established current legal status. EPA's database may change during a multi-page live query, which can cause validation failure and require retry.
