@@ -69,7 +69,7 @@
     var tbody = document.getElementById('results');
     tbody.textContent = '';
     var frag = document.createDocumentFragment();
-    chosen.slice(0, maxTableRows).forEach(function (r) {
+    chosen.slice(0, chosen.length<=maxMarkers ? chosen.length : maxTableRows).forEach(function (r, index) {
       var cat = classification(r.compliance_status);
       var marker = L.circleMarker([r.latitude, r.longitude], {
         radius: 7, color: '#243549', weight: 1.2, fillColor: color(cat), fillOpacity: 0.87
@@ -96,7 +96,7 @@
       sourceLink.href = /^https:\/\/echo\.epa\.gov\//.test(r.epa_report_url) ? r.epa_report_url : 'https://echo.epa.gov/detailed-facility-report?fid=' + encodeURIComponent(r.registry_id);
       sourceLink.target = '_blank'; sourceLink.rel = 'noopener noreferrer'; sourceLink.textContent = 'ECHO record';
       linkCell.appendChild(sourceLink); tr.appendChild(linkCell);
-      frag.appendChild(tr);
+      if(index<maxTableRows)frag.appendChild(tr);
     });
     tbody.appendChild(frag);
     if(chosen.length>maxTableRows)$('#table-explainer').text('Showing the first '+maxTableRows+' table rows from '+chosen.length.toLocaleString('en-US')+' matching facilities. Charts and grid use ALL matches.');
