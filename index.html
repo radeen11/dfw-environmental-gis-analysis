@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="An independently developed interactive map exploring a 75-record sample of EPA ECHO TRI-flagged facilities in the Dallas–Fort Worth area.">
+  <meta name="description" content="An independently developed interactive map exploring a 300-record extract of EPA ECHO TRI-flagged facilities in the Dallas–Fort Worth area.">
   <title>DFW Industrial Facilities | EPA ECHO GIS Portfolio</title>
   <link rel="stylesheet" href="css/leaflet.css">
   <style>
@@ -71,8 +71,8 @@
 <a class="skip" href="#filters">Skip to filters</a>
 <header class="header">
   <h1>DFW Industrial Facilities: EPA ECHO Map</h1>
-  <p class="sub"><span class="pill">Independent GIS portfolio project</span> Interactive geographic explorer of 75 TRI-flagged facility records from the U.S. EPA ECHO public database.</p>
-  <p class="sub">A capped, illustrative sample rather than a complete DFW inventory or an environmental risk assessment.</p>
+  <p class="sub"><span class="pill">Independent GIS portfolio project</span> Interactive geographic explorer of 300 TRI-flagged facility records from the U.S. EPA ECHO public database.</p>
+  <p class="sub">A complete extract for the defined rectangular study area rather than a metropolitan-wide inventory or an environmental risk assessment.</p>
 </header>
 <main class="layout">
   <aside id="filters" aria-label="Facility filters">
@@ -104,29 +104,29 @@
       <div><span class="dot" style="background:#d64b52"></span>Significant violation</div>
       <div><span class="dot" style="background:#758ba7"></span>Unknown / other</div>
     </div>
-    <div class="overlay-line"><label for="grid-toggle"><input type="checkbox" id="grid-toggle"> Show approximate 10 km facility-count grid</label><div id="grid-status" class="status" aria-live="polite" style="margin-top:.45rem">Grid off</div><p class="analysis-note">Cell counts reflect this sample only, not pollution intensity or risk. Grid uses approximate local kilometer scaling.</p></div>
+    <div class="overlay-line"><label for="grid-toggle"><input type="checkbox" id="grid-toggle"> Show approximate 10 km facility-count grid</label><div id="grid-status" class="status" aria-live="polite" style="margin-top:.45rem">Grid off</div><p class="analysis-note">Cell counts reflect this extract only, not pollution intensity or risk. Grid uses approximate local kilometer scaling.</p></div>
     <p class="disclaimer"><strong>Interpretation:</strong> TRI participation does not establish emissions at a specific time, human exposure, unsafe conditions, or violations. ECHO statuses may be missing or stale. Locations may be approximate; consult each source record.</p>
   </aside>
   <section class="map-wrap" aria-label="Map and facility results">
     <div id="map" aria-label="Interactive map of EPA facility points"></div>
     <section class="analysis-section" aria-labelledby="analysis-title">
-      <h2 id="analysis-title">Sample analysis dashboard</h2>
-      <p class="analysis-note">Counts update with filters. Because the EPA extract was capped at 75 records and sorted by registry ID, differences between cities cannot be interpreted as full-region facility prevalence or rankings.</p>
+      <h2 id="analysis-title">Facility analysis dashboard</h2>
+      <p class="analysis-note">Counts update with filters. This extract includes all matching TRI-flagged ECHO points inside the defined rectangle, but it is not a count of all industrial facilities or a standardized comparison across municipalities.</p>
       <div class="summary-stats">
-        <div class="stat"><strong id="stat-facilities">—</strong><span>Sample records matching filters</span></div>
+        <div class="stat"><strong id="stat-facilities">—</strong><span>ECHO records matching filters</span></div>
         <div class="stat"><strong id="stat-cities">—</strong><span>Cities represented</span></div>
         <div class="stat"><strong id="stat-accuracy">—</strong><span>Coordinates with stated accuracy over 100 m</span></div>
       </div>
       <div class="chart-row">
-        <div class="chart"><h3>Top cities by sampled facility count</h3><div id="chart-cities" role="img" aria-label="Bar chart of selected facility counts by city"></div></div>
+        <div class="chart"><h3>Top cities by extracted facility count</h3><div id="chart-cities" role="img" aria-label="Bar chart of selected facility counts by city"></div></div>
         <div class="chart"><h3>EPA program flags (overlap allowed)</h3><div id="chart-programs" role="img" aria-label="Bar chart of EPA program flags"></div></div>
       </div>
-      <p class="analysis-note">Program categories are not exclusive: a facility may appear in multiple bars. The grid overlay shows counts in approximate 10 km cells—not density normalized by land area, population, or time.</p>
+      <p class="analysis-note">Program categories are not exclusive: a facility may appear in multiple bars. The grid overlay shows counts in approximate 10 km cells—not normalized for facility type, land area, population, or time.</p>
       <p><a href="ANALYSIS.md">Read the statistical methods, interpretation and limitations</a></p>
     </section>
     <div class="table-section">
       <h2>Matching records</h2>
-      <p class="status" id="table-explainer">Select a facility to zoom to its marker. All records are a sample.</p>
+      <p class="status" id="table-explainer">Select a facility to zoom to its marker. The rectangle is not a metropolitan boundary; points may be approximate.</p>
       <div style="overflow-x:auto">
         <table><thead><tr><th scope="col">Facility</th><th scope="col">City</th><th scope="col">Reported status</th><th scope="col">EPA source</th></tr></thead><tbody id="results"></tbody></table>
       </div>
@@ -134,7 +134,7 @@
   </section>
 </main>
 <footer>
-  Data: <a href="https://echo.epa.gov/">U.S. EPA ECHO</a> (retrieved Nov 26, 2026).
+  Data: <a href="https://echo.epa.gov/">U.S. EPA ECHO</a> (retrieved Nov 26, 2026; 300 records for the study rectangle).
   <a href="DATA_SOURCE.md">Dataset source and limitations</a> ·
   <a href="https://github.com/radeen11/dfw-environmental-gis-analysis">Source repository</a>.
   Map uses <a href="https://leafletjs.com/">Leaflet</a> and <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>.
