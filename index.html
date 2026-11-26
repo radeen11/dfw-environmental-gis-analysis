@@ -81,10 +81,26 @@
     <label for="dataset-mode">Dataset scope</label>
     <select id="dataset-mode">
       <option value="tri">TRI-associated EPA facilities — 300 recorded points</option>
-      <option value="all">All EPA ECHO facilities — complete live study-area records</option>
+      <option value="all">All EPA ECHO — last-inspection year</option>
     </select>
     <p id="scope-description" class="analysis-note" aria-live="polite">Complete 300-record TRI-flagged point extract for the study rectangle, collected November 26, 2026.</p>
-    <p id="all-mode-notice" class="analysis-note" hidden>All ECHO mode loads <strong>every EPA-listed facility</strong> inside the study rectangle in batches, then applies filters to the complete loaded dataset. For performance, the map uses the grid instead of individual markers when more than 1,500 match. The table shows the first 250 matching entries; totals and charts count every record. ECHO data does not include every possible permit, every historical violation, or every industrial site.</p>
+    <p id="all-mode-notice" class="analysis-note" hidden>All ECHO year mode loads <strong>every qualifying facility for the selected last-inspection year</strong> within the study rectangle in pages. For performance, the map uses the grid instead of individual markers when more than 1,500 match. The table shows up to 250 entries, but totals and charts include every qualifying record. ECHO data does not include every possible permit, every historical violation, or every industrial site.</p>
+    <div id="inspection-year-wrap" hidden>
+      <label for="inspection-year">Year of last recorded inspection</label>
+      <select id="inspection-year">
+        <option value="2026">2026 (year to date)</option>
+        <option value="2025" selected>2025</option>
+        <option value="2024">2024</option>
+        <option value="2023">2023</option>
+        <option value="2022">2022</option>
+        <option value="2021">2021</option>
+        <option value="2020">2020</option>
+        <option value="2019">2019</option>
+        <option value="2018">2018</option>
+        <option value="2017">2017</option>
+      </select>
+      <p class="analysis-note">This selects facilities whose <em>latest inspection recorded by EPA</em> falls in the chosen year. It is <strong>not</strong> a census of every facility operating that year, and excludes facilities without a recorded last-inspection date.</p>
+    </div>
     <label for="search">Find by facility name or address</label>
     <input id="search" type="search" placeholder="e.g. Carrollton or Sherwin">
     <label for="city">City</label>
@@ -152,6 +168,6 @@
 <script src="lib/jquery-3.3.1.min.js"></script>
 <script src="lib/jquery.csv.min.js"></script>
 <script src="lib/leaflet.js"></script>
-<script src="js/dfw-map-complete.js"></script>
+<script src="js/dfw-map-inspection-year.js"></script>
 </body>
 </html>
