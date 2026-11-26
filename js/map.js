@@ -195,7 +195,7 @@
   $('#city,#program,#status,#accuracy-filter').on('change',render);
   $('#reset').on('click',function(){ $search.val('');$city.val('');$program.val('');$status.val('');$('#accuracy-filter').prop('checked',false);render();fit();});
   $('#fit').on('click',fit);
-  $.ajax({url:'data/dfw-epa-tri-facilities-complete.csv',dataType:'text',cache:false})
+  $.ajax({url:'data/dfw-epa-tri-facilities-complete.csv?v=20261126-full300-a',dataType:'text',cache:false})
     .done(load)
     .fail(function(){
       $('#count').text('Unable to load the EPA dataset.');
