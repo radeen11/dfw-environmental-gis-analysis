@@ -1,74 +1,127 @@
-$(window).resize(function () {
-  var h = $(window).height(),
-    offsetTop = 125; // Calculate the top offset
+/* DFW EPA ECHO GIS portfolio map — original customization of the DataMade template.
+ * Data provenance: ../DATA_SOURCE.md. Leaflet and OpenStreetMap, no Google API key.
+ */
+(function () {
+  'use strict';
+  var map = L.map('map', {scrollWheelZoom: true}).setView([32.88, -97.0], 9);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19
+  }).addTo(map);
+  var markerLayer = L.layerGroup().addTo(map);
+  var records = [];
+  var markers = new Map();
+  var $search = $('#search'), $city = $('#city'), $program = $('#program'), $status = $('#status');
 
-  $('#mapCanvas').css('height', (h - offsetTop));
-}).resize();
-
-$(function() {
-
-  SearchableMapLib.initialize({
-    filePath: 'data/chicago-flu-shot-locations-2019.csv',
-    fileType: 'csv',
-    recordName: 'flu shot location',
-    recordNamePlural: 'flu shot locations',
-    map_centroid: [41.85754, -87.66231],
-    defaultZoom:  11,
-    defaultRadius: 1610,
-    debug: false,
-  });
-
-  var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search-address'));
-  var modalURL;
-
-  $('#btnSearch').click(function(){
-    // Temporary fix for map load issue: set show map as default.
-    if ($('#mapCanvas').is(":visible")){
-      SearchableMapLib.doSearch();
+  function text(value) { return String(value == null ? '' : value); }
+  function escapeHtml(value) {
+    return text(value).replace(/[&<>"']/g, function (c) {
+      return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c];
+    });
+  }
+  function classification(status) {
+    var s = text(status).trim().toLowerCase();
+    if (s.indexOf('significant') !== -1) return 'significant';
+    if (s === 'no violation identified') return 'no';
+    if (s.indexOf('violation') !== -1) return 'violation';
+    return 'unknown';
+  }
+  function color(category) {
+    return {no:'#397b63', violation:'#dd9845', significant:'#d64b52', unknown:'#758ba7'}[category];
+  }
+  function description(record) {
+    var status = record.compliance_status || 'Not reported';
+    var acc = record.coordinate_accuracy_meters || 'Not reported';
+    var address = [record.street, record.city, record.state, record.zip].filter(Boolean).join(', ');
+    var detailUrl = /^https:\/\/echo\.epa\.gov\//.test(record.epa_report_url) ?
+      record.epa_report_url : 'https://echo.epa.gov/detailed-facility-report?fid=' + encodeURIComponent(record.registry_id);
+    return '<strong>' + escapeHtml(record.facility_name) + '</strong>' +
+      '<p>' + escapeHtml(address) + '</p>' +
+      '<p><b>Registry ID:</b> ' + escapeHtml(record.registry_id) + '<br>' +
+      '<b>Reported status:</b> ' + escapeHtml(status) + '<br>' +
+      '<b>Air / NPDES / RCRA:</b> ' + [record.air_flag,record.npdes_flag,record.rcra_flag].map(escapeHtml).join(' / ') + '<br>' +
+      '<b>EPA coordinate accuracy:</b> ' + escapeHtml(acc) + ' m</p>' +
+      '<a href="' + escapeHtml(detailUrl) + '" target="_blank" rel="noopener noreferrer">View original EPA facility record</a>';
+  }
+  function filtered() {
+    var needle = $search.val().trim().toLowerCase(), city = $city.val(), program = $program.val(), status = $status.val();
+    return records.filter(function (r) {
+      var haystack = [r.facility_name, r.street, r.city, r.registry_id].join(' ').toLowerCase();
+      return (!needle || haystack.indexOf(needle) >= 0) &&
+        (!city || r.city === city) &&
+        (!program || r[program] === 'Y') &&
+        (!status || classification(r.compliance_status) === status);
+    });
+  }
+  function render() {
+    markerLayer.clearLayers();
+    markers.clear();
+    var chosen = filtered();
+    var tbody = document.getElementById('results');
+    tbody.textContent = '';
+    var frag = document.createDocumentFragment();
+    chosen.forEach(function (r) {
+      var cat = classification(r.compliance_status);
+      var marker = L.circleMarker([r.latitude, r.longitude], {
+        radius: 7, color: '#243549', weight: 1.2, fillColor: color(cat), fillOpacity: 0.87
+      }).bindPopup(description(r), {maxWidth: 300});
+      marker.addTo(markerLayer);
+      markers.set(r.registry_id, marker);
+      var tr = document.createElement('tr');
+      var nameCell = document.createElement('td');
+      var button = document.createElement('button');
+      button.type = 'button'; button.className = 'focus-record'; button.textContent = r.facility_name;
+      button.addEventListener('click', function () {
+        map.setView([r.latitude,r.longitude], 13);
+        marker.openPopup();
+        document.getElementById('map').scrollIntoView({behavior:'smooth',block:'start'});
+      });
+      nameCell.appendChild(button); tr.appendChild(nameCell);
+      var cityCell = document.createElement('td'); cityCell.textContent = r.city; tr.appendChild(cityCell);
+      var statusCell = document.createElement('td'); statusCell.textContent = r.compliance_status || 'Not reported'; tr.appendChild(statusCell);
+      var linkCell = document.createElement('td');
+      var sourceLink = document.createElement('a');
+      sourceLink.href = /^https:\/\/echo\.epa\.gov\//.test(r.epa_report_url) ? r.epa_report_url : 'https://echo.epa.gov/detailed-facility-report?fid=' + encodeURIComponent(r.registry_id);
+      sourceLink.target = '_blank'; sourceLink.rel = 'noopener noreferrer'; sourceLink.textContent = 'ECHO record';
+      linkCell.appendChild(sourceLink); tr.appendChild(linkCell);
+      frag.appendChild(tr);
+    });
+    tbody.appendChild(frag);
+    $('#count').text(chosen.length + ' of ' + records.length + ' EPA sample facilities shown');
+    if (chosen.length === 0) {
+      var tr = document.createElement('tr'), td = document.createElement('td');
+      td.colSpan = 4; td.textContent = 'No matching facilities. Try different filters.';
+      tr.appendChild(td); tbody.appendChild(tr);
     }
-    else {
-      $('#btnViewMode').html("<i class='fa fa-list'></i> List view");
-      $('#mapCanvas').show();
-      $('#listCanvas').hide();
-      SearchableMapLib.doSearch();
-    }
-  });
-
-  $(':checkbox').click(function(){
-    SearchableMapLib.doSearch();
-  });
-
-  $(':radio').click(function(){
-    SearchableMapLib.doSearch();
-  });
-
-  $('#btnViewMode').click(function(){
-    if ($('#mapCanvas').is(":visible")){
-      $('#btnViewMode').html("<i class='fa fa-map-marker'></i> Map view");
-      $('#listCanvas').show();
-      $('#mapCanvas').hide();
-    }
-    else {
-      $('#btnViewMode').html("<i class='fa fa-list'></i> List view");
-      $('#listCanvas').hide();
-      $('#mapCanvas').show();
-    }
-  });
-
-  $("#search-address, #search-name").keydown(function(e){
-      var key =  e.keyCode ? e.keyCode : e.which;
-      if(key == 13) {
-          $('#btnSearch').click();
-          return false;
-      }
-  });
-
-  $(".close-btn").on('click', function() {
-    $.address.parameter('modal_id', null)
-  });
-
-});
-
-function formatAddress(prop) {
-    return prop["Street1"] + " " + prop["Street2"] + " " + prop["City"] + " " + prop["State"];
-}
+  }
+  function fit() {
+    if (markerLayer.getLayers().length) map.fitBounds(markerLayer.getBounds(), {padding:[30,30], maxZoom:12});
+    else map.setView([32.88,-97.0], 9);
+  }
+  function load(raw) {
+    var rows = $.csv.toObjects(raw);
+    var seen = new Set();
+    records = rows.map(function (r) {
+      var lat = Number(r.latitude), lon = Number(r.longitude);
+      if (!r.registry_id || seen.has(r.registry_id) || !Number.isFinite(lat) || !Number.isFinite(lon) ||
+          lat < 32.55 || lat > 33.35 || lon < -97.55 || lon > -96.40) return null;
+      seen.add(r.registry_id);
+      r.latitude = lat; r.longitude = lon;
+      return r;
+    }).filter(Boolean);
+    records.sort(function (a,b) {return a.facility_name.localeCompare(b.facility_name);});
+    var cities = Array.from(new Set(records.map(function(r){return r.city;}))).filter(Boolean).sort();
+    cities.forEach(function(city){ $city.append($('<option>').val(city).text(city));});
+    render(); fit();
+  }
+  $('#search').on('input',render);
+  $('#city,#program,#status').on('change',render);
+  $('#reset').on('click',function(){ $search.val('');$city.val('');$program.val('');$status.val('');render();fit();});
+  $('#fit').on('click',fit);
+  $.ajax({url:'data/dfw-epa-tri-facilities-sample.csv',dataType:'text',cache:false})
+    .done(load)
+    .fail(function(){
+      $('#count').text('Unable to load the EPA dataset.');
+      $('#table-explainer').after($('<p class="error">').text('CSV data could not be fetched. Open the site using GitHub Pages or a local web server, not file://.'));
+    });
+})();
