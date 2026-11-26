@@ -1,58 +1,59 @@
-# DFW Industrial Facilities — Interactive EPA ECHO Map
+# DFW Industrial Facilities — EPA ECHO GIS Dashboard
 
-An independent, open-source GIS portfolio project customizing the [DataMade Searchable Map Template](https://github.com/datamade/searchable-map-template-csv) to visualize a **capped sample of 75 facilities** in the Dallas–Fort Worth region flagged in EPA ECHO as associated with the Toxics Release Inventory (TRI).
+**[View the live interactive map](https://radeen11.github.io/dfw-environmental-gis-analysis/)**
 
-**Project stage:** Live on GitHub Pages. Initial map display, search, filters, and marker popups were confirmed by the project owner on November 26, 2026. Additional dashboard/grid features have been committed but still require a fresh browser test.
+A public environmental GIS portfolio project that adapted the MIT-licensed [DataMade Searchable Map Template — CSV](https://github.com/datamade/searchable-map-template-csv) into a responsive Leaflet dashboard. It analyzes **300 EPA ECHO TRI-associated facility records** in a defined Dallas–Fort Worth study rectangle.
 
-## Features
+## What it does
 
-- Leaflet map with OpenStreetMap tiles (no Google Maps API key or Google billing)
-- Clickable, color-coded facility markers with EPA-reported status and source links
-- Text search for facility name, address, and Registry ID
-- City, Clean Air Act, NPDES, RCRA and compliance-status filters
-- Keyboard-operable facility results table and responsive layout
-- Filter-responsive city and EPA-program summary charts, with source limitations
-- Optional approximate 10 km grid overlay of selected facility counts (not pollution density)
-- Coordinate accuracy quality-control indicator
-- Transparent dataset provenance and interpretation cautions
+- Maps all **300 records** that match a verified, paginated EPA ECHO query; links every point to its EPA facility report.
+- Searches facility names, addresses, registry IDs and city names, with regulatory program and compliance-status filters.
+- Displays filter-responsive city/program bar charts and a summary of record and coordinate-quality counts.
+- Aggregates selected points into an optional **approximate 10 km square grid** for spatial pattern exploration.
+- Offers a **≤100 m source coordinate-accuracy screen** to examine geographic-quality sensitivity.
+- Runs statically on GitHub Pages without backend code, Google Maps API, or a paid API key.
 
-**[Open the live map](https://radeen11.github.io/dfw-environmental-gis-analysis/)**
+## Key observed results (Nov 26, 2026 snapshot)
 
-## Observations from the 75-record sample
+| Indicator | Count |
+| --- | ---: |
+| EPA records / unique FRS IDs | 300 |
+| EPA-reported city labels | 53 |
+| No Violation Identified | 197 |
+| Violation / Violation Identified / Significant Violation | 13 |
+| Unknown or blank status | 90 |
+| Air / NPDES / RCRA program flags | 69 / 206 / 150 |
+| Locations reporting coordinate accuracy >100 m | 52 |
+| Occupied approximate 10 km grid cells | 64 |
 
-The current dataset contains 60 records marked "No Violation Identified," seven records with a reported violation status (including three significant), and eight with no reported status. Of the 75 records, 32 have the air flag, 59 have the NPDES/water flag and 61 have the RCRA/waste flag (these groups overlap). Five records list coordinate accuracy worse than 100 meters.
+**Interpretation warning:** These values apply **only to TRI-flagged ECHO facilities inside the rectangle**, not all DFW industrial facilities. They do not measure pollution levels, exposure, health outcomes, or actual current violations. See [ANALYSIS.md](ANALYSIS.md).
 
-These are **descriptive counts for a registry-ID-sorted, capped sample** only; they cannot establish DFW-wide prevalence or exposure. [Read the full methodology and analysis.](ANALYSIS.md)
+## Reproduce the analysis
 
-## View locally
+1. Use Python 3.9+ to run `python3 scripts/fetch_epa_echo.py`, which retrieves EPA query count and every results page, checks coordinate values and FRS registry IDs, and rewrites the CSV. The service changes over time; a new count may not equal 300.
+2. Run a local static server, e.g. `python3 -m http.server 8000` from the repository root.
+3. Visit `http://localhost:8000/` (or the GitHub Pages URL), and use the controls to explore results.
+4. Read [DATA_SOURCE.md](DATA_SOURCE.md) for the exact source and extraction design and [ANALYSIS.md](ANALYSIS.md) for research questions, methods, results, uncertainty, and limitations.
 
-Run a local HTTP server in this folder; for example:
+## Project structure
 
-```bash
-python3 -m http.server 8000
-```
+- `index.html` — accessible, responsive map and charts interface.
+- `js/map.js` — Leaflet visualization, spatial aggregation and filter-aware summary logic.
+- `data/dfw-epa-tri-facilities-complete.csv` — full 300-record study-area extract.
+- `data/dfw-epa-tri-facilities-sample.csv` — archived 75-record pilot snapshot (not currently mapped).
+- `scripts/fetch_epa_echo.py` — reproducible EPA ArcGIS paginated extraction and cleaning.
+- `ANALYSIS.md` — detailed methodology and interpretation.
+- `DATA_SOURCE.md` — source identification, query parameters and caveats.
+- `PROJECT_PLAN.md` — project history and remaining enhancements.
 
-Then visit `http://localhost:8000/`. Opening the HTML directly from `file://` may block CSV loading.
+## Limitations and ethics
 
-## Publish with GitHub Pages
+The study rectangle is not the official DFW metro area; city counts are not normalized by population or municipal area. Grid sizes are approximate, not computed in a projected CRS. Some point positions have considerable reported uncertainty, and a GIS pin is not proof of an exact industrial discharge location. Program associations and ECHO statuses do not alone indicate harm or exposure. No scientific causal or health-risk analysis is claimed.
 
-1. Open **Settings → Pages** for this repository.
-2. Set **Build and deployment → Source** to **Deploy from a branch**.
-3. Choose **master** and **/(root)**, then Save.
-4. After deployment, open `https://radeen11.github.io/dfw-environmental-gis-analysis/`.
-5. Verify that markers, filters, table, and EPA links work.
+## Original software attribution
 
-## Data
+Originally forked from [DataMade's Searchable Map Template — CSV](https://github.com/datamade/searchable-map-template-csv), itself influenced by Derek Eder. The source is under MIT license; its [LICENSE](LICENSE) and copyright notice are retained. The portfolio version adds independent EPA data integration, map interface, program/status filters, analysis charts, spatial grid aggregation, quality screening, data extraction script, and research documentation.
 
-- `data/dfw-epa-tri-facilities-sample.csv` — 75 EPA ECHO records
-- [DATA_SOURCE.md](DATA_SOURCE.md) — extraction settings, limitations, and reproducibility
-- [PROJECT_PLAN.md](PROJECT_PLAN.md) — research question and outstanding work
-- [ANALYSIS.md](ANALYSIS.md) — results, spatial grid method, quality checks and interpretation
+Map uses Leaflet and © OpenStreetMap contributors; facility records from the U.S. Environmental Protection Agency. This is an independent personal portfolio project, not affiliated with EPA.
 
-The sample is not a complete DFW inventory. EPA TRI association and reported compliance statuses are **not** evidence of actual exposure, site-specific risk, or up-to-date regulatory findings; point coordinates may also be approximate. Consult EPA reports before drawing conclusions.
-
-## Credits and license
-
-Derived from [DataMade's Searchable Map Template – CSV](https://github.com/datamade/searchable-map-template-csv), itself based on work by Derek Eder. The original project is MIT licensed; its [LICENSE](LICENSE) is preserved. This map adds new dataset integration, UI, filters, documentation, and responsive presentation, retaining attribution to the source authors.
-
-Map tiles © OpenStreetMap contributors. Facility records provided by the U.S. Environmental Protection Agency.
+**Verification:** Initial site, markers, filters and popups were confirmed in the browser by the project owner. The 300-row update and coordinate-quality filter require a final refreshed browser check.
