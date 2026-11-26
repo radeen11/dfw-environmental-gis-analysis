@@ -102,3 +102,12 @@ Relevant EPA guidance: [ECHO Map Service](https://echo.epa.gov/tools/map-service
 - Public GitHub Pages deployment and maintained methodology.
 
 See [README.md](README.md) for the live website and attribution. The initial map search, filters and popups were user-tested. The completed 300-record live deployment was subsequently browser-tested: map count 300/300, 64 occupied grid cells, and the ≤100 m accuracy screen reduced the map to 248/300 records and 61 occupied cells, with charts updating accordingly.
+
+
+## 8. Expanded regulatory scope: TRI vs. all-ECHO live mode
+
+The map now offers a **dataset scope selector**. The saved TRI extract comprises 300 matching points in the rectangle. The separate all-ECHO mode queries the authoritative service live, across all ECHO programs, rather than treating the TRI filter as a complete inventory.
+
+The EPA live query returned **34,152 all-ECHO records** in the rectangle at the time of testing. The web browser loads no more than **300 matching records at once** to avoid overload; the full matching count is still reported. Because selection is ordered by FRS registry ID, the preview is **not representative**, and neither charts nor geographic markers in the all-ECHO view can be interpreted as a complete spatial distribution. For meaningful comparisons, first narrow the query until the matching total is 300 or fewer. A future version may use server-side aggregations or vector-tile clustering for genuinely complete regional visualizations.
+
+All-ECHO records include many nonindustrial sites and sites associated with other programs; they do **not** represent violations, emissions, pollution, or public-health threats. EPA's current statuses can differ by program, update cycle and facility identifiers.
