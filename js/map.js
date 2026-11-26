@@ -50,7 +50,9 @@
       return (!needle || haystack.indexOf(needle) >= 0) &&
         (!city || r.city === city) &&
         (!program || r[program] === 'Y') &&
-        (!status || classification(r.compliance_status) === status);
+        (!status || classification(r.compliance_status) === status) &&
+        (!document.getElementById('accuracy-filter').checked ||
+         (r.coordinate_accuracy_meters !== '' && Number(r.coordinate_accuracy_meters) <= 100));
     });
   }
   function render() {
@@ -190,8 +192,8 @@
   $('#grid-toggle').on('change',function(){updateGrid(filtered());});
 
   $('#search').on('input',render);
-  $('#city,#program,#status').on('change',render);
-  $('#reset').on('click',function(){ $search.val('');$city.val('');$program.val('');$status.val('');render();fit();});
+  $('#city,#program,#status,#accuracy-filter').on('change',render);
+  $('#reset').on('click',function(){ $search.val('');$city.val('');$program.val('');$status.val('');$('#accuracy-filter').prop('checked',false);render();fit();});
   $('#fit').on('click',fit);
   $.ajax({url:'data/dfw-epa-tri-facilities-complete.csv',dataType:'text',cache:false})
     .done(load)
