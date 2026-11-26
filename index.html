@@ -81,10 +81,10 @@
     <label for="dataset-mode">Dataset scope</label>
     <select id="dataset-mode">
       <option value="tri">TRI-associated EPA facilities — 300 recorded points</option>
-      <option value="all">All EPA ECHO-listed facilities — live search</option>
+      <option value="all">All EPA ECHO facilities — complete live study-area records</option>
     </select>
     <p id="scope-description" class="analysis-note" aria-live="polite">Complete 300-record TRI-flagged point extract for the study rectangle, collected November 26, 2026.</p>
-    <p id="all-mode-notice" class="analysis-note" hidden>The EPA lists tens of thousands of records in this area. This mode queries current records directly and shows <strong>up to 300 matching locations per search</strong>, with the full matching total displayed separately. Use city, facility text, or regulatory-status filters to narrow results. The 300 preview records are not a statistically representative sample.</p>
+    <p id="all-mode-notice" class="analysis-note" hidden>All ECHO mode loads <strong>every EPA-listed facility</strong> inside the study rectangle in batches, then applies filters to the complete loaded dataset. For performance, the map uses the grid instead of individual markers when more than 1,500 match. The table shows the first 250 matching entries; totals and charts count every record. ECHO data does not include every possible permit, every historical violation, or every industrial site.</p>
     <label for="search">Find by facility name or address</label>
     <input id="search" type="search" placeholder="e.g. Carrollton or Sherwin">
     <label for="city">City</label>
@@ -135,7 +135,7 @@
     </section>
     <div class="table-section">
       <h2>Matching records</h2>
-      <p class="status" id="table-explainer">Select a facility to zoom to its marker. The rectangle is not a metropolitan boundary; points may be approximate.</p>
+      <p class="status" id="table-explainer">The table lists up to the first 250 matching records. Select a facility to zoom to its location. The rectangle is not a metropolitan boundary and points may be approximate.</p>
       <div style="overflow-x:auto">
         <table><thead><tr><th scope="col">Facility</th><th scope="col">City</th><th scope="col">Reported status</th><th scope="col">EPA source</th></tr></thead><tbody id="results"></tbody></table>
       </div>
@@ -152,6 +152,6 @@
 <script src="lib/jquery-3.3.1.min.js"></script>
 <script src="lib/jquery.csv.min.js"></script>
 <script src="lib/leaflet.js"></script>
-<script src="js/dfw-map-scope-v2.js"></script>
+<script src="js/dfw-map-complete.js"></script>
 </body>
 </html>
