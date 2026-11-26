@@ -56,4 +56,4 @@ Originally forked from [DataMade's Searchable Map Template — CSV](https://gith
 
 Map uses Leaflet and © OpenStreetMap contributors; facility records from the U.S. Environmental Protection Agency. This is an independent personal portfolio project, not affiliated with EPA.
 
-**Verification:** Initial site, markers, filters and popups were confirmed in the browser by the project owner. The 300-row update and coordinate-quality filter require a final refreshed browser check.
+**Verification:** The live 300-record deployment was browser-tested on November 26, 2026: 300/300 facility markers and charts loaded; the 10 km grid displayed 64 occupied cells; enabling the ≤100 m positional-quality filter reduced the map to 248/300 records and 61 occupied grid cells. Earlier search, status filters and popups were also tested by the project owner.
