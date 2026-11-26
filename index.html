@@ -46,6 +46,24 @@
     .status{font-size:.82rem;color:#d7e2ed}
     footer{padding:1rem 1.5rem;color:#b9c9d7;font-size:.8rem;line-height:1.6;background:#111823}
     .error{padding:1rem;background:#57292c;color:#fff}
+    .analysis-section{padding:1.3rem;background:#172132;border-bottom:1px solid #354456}
+    .analysis-section h2{font-size:1.25rem;margin:0 0 .5rem}
+    .analysis-note{font-size:.85rem;color:#c4d0dc;line-height:1.55;max-width:95ch}
+    .summary-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:1rem 0}
+    .stat{background:#25364a;padding:.85rem;border-radius:8px}
+    .stat strong{display:block;font-size:1.45rem;font-variant-numeric:tabular-nums}
+    .stat span{font-size:.8rem;color:#bfd0dd}
+    .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+    .chart{background:#1c2a3c;border-radius:9px;padding:1rem;min-width:0}
+    .chart h3{margin:.1rem 0 .65rem;font-size:.98rem}
+    .bar-row{display:grid;grid-template-columns:minmax(90px,140px) minmax(20px,1fr) 26px;align-items:center;gap:.55rem;margin:.48rem 0;font-size:.78rem}
+    .bar-track{background:#34465a;border-radius:5px;overflow:hidden;height:13px}
+    .bar-fill{background:#80b3d6;height:100%}
+    .bar-count{text-align:right;font-variant-numeric:tabular-nums}
+    .overlay-line{margin:1rem 0;padding:.7rem;border:1px solid #63768c;border-radius:6px}
+    .overlay-line label{display:inline;font-size:.88rem;font-weight:500}
+    .overlay-line input{width:auto;min-height:auto;vertical-align:middle;margin-right:.3rem}
+    @media(max-width:690px){.summary-stats,.chart-row{grid-template-columns:1fr}}
     @media(max-width:820px){.layout{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid #304259}#map{height:55vh;min-height:340px}}
   </style>
 </head>
@@ -86,10 +104,26 @@
       <div><span class="dot" style="background:#d64b52"></span>Significant violation</div>
       <div><span class="dot" style="background:#758ba7"></span>Unknown / other</div>
     </div>
+    <div class="overlay-line"><label for="grid-toggle"><input type="checkbox" id="grid-toggle"> Show approximate 10 km facility-count grid</label><p class="analysis-note">Cell counts reflect this sample only, not pollution intensity or risk. Grid uses approximate local kilometer scaling.</p></div>
     <p class="disclaimer"><strong>Interpretation:</strong> TRI participation does not establish emissions at a specific time, human exposure, unsafe conditions, or violations. ECHO statuses may be missing or stale. Locations may be approximate; consult each source record.</p>
   </aside>
   <section class="map-wrap" aria-label="Map and facility results">
     <div id="map" aria-label="Interactive map of EPA facility points"></div>
+    <section class="analysis-section" aria-labelledby="analysis-title">
+      <h2 id="analysis-title">Sample analysis dashboard</h2>
+      <p class="analysis-note">Counts update with filters. Because the EPA extract was capped at 75 records and sorted by registry ID, differences between cities cannot be interpreted as full-region facility prevalence or rankings.</p>
+      <div class="summary-stats">
+        <div class="stat"><strong id="stat-facilities">—</strong><span>Sample records matching filters</span></div>
+        <div class="stat"><strong id="stat-cities">—</strong><span>Cities represented</span></div>
+        <div class="stat"><strong id="stat-accuracy">—</strong><span>Coordinates with stated accuracy over 100 m</span></div>
+      </div>
+      <div class="chart-row">
+        <div class="chart"><h3>Top cities by sampled facility count</h3><div id="chart-cities" role="img" aria-label="Bar chart of selected facility counts by city"></div></div>
+        <div class="chart"><h3>EPA program flags (overlap allowed)</h3><div id="chart-programs" role="img" aria-label="Bar chart of EPA program flags"></div></div>
+      </div>
+      <p class="analysis-note">Program categories are not exclusive: a facility may appear in multiple bars. The grid overlay shows counts in approximate 10 km cells—not density normalized by land area, population, or time.</p>
+      <p><a href="ANALYSIS.md">Read the statistical methods, interpretation and limitations</a></p>
+    </section>
     <div class="table-section">
       <h2>Matching records</h2>
       <p class="status" id="table-explainer">Select a facility to zoom to its marker. All records are a sample.</p>
