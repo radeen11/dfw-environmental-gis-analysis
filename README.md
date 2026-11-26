@@ -1,8 +1,12 @@
-# DFW Industrial Facilities — EPA ECHO GIS Dashboard
+# Dallas–Fort Worth EPA Facility Explorer
 
 **[View the live interactive map](https://radeen11.github.io/dfw-environmental-gis-analysis/)**
 
-A public environmental GIS portfolio project that adapted the MIT-licensed [DataMade Searchable Map Template — CSV](https://github.com/datamade/searchable-map-template-csv) into a responsive Leaflet dashboard. It analyzes **300 EPA ECHO TRI-associated facility records** in a defined Dallas–Fort Worth study rectangle.
+An independent environmental GIS portfolio project that adapted the MIT-licensed [DataMade Searchable Map Template — CSV](https://github.com/datamade/searchable-map-template-csv) into a responsive Leaflet dashboard. It analyzes **300 EPA ECHO TRI-associated facility records** in a defined Dallas–Fort Worth study rectangle.
+
+## What the two views mean
+
+**TRI-associated facilities** is a fixed snapshot of 300 ECHO facilities with a TRI association in the rectangular study area (November 26, 2026). **Latest inspection year** queries EPA for facilities whose **most recent recorded inspection date** falls within the selected calendar year. That is not the count of inspections conducted during the year and not a census of facilities operating then. Neither view alone establishes pollution, risk, or violation history.
 
 ## What it does
 
