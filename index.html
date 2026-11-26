@@ -104,7 +104,7 @@
       <option value="significant">Significant violation</option>
       <option value="unknown">Not reported / other</option>
     </select>
-    <div class="overlay-line"><label for="accuracy-filter"><input id="accuracy-filter" type="checkbox"> Limit to EPA coordinates with stated accuracy ≤100 m</label><p class="analysis-note">Excludes 52 of 300 records when enabled. This improves the positional-quality screen but is not a guarantee of survey-grade accuracy.</p></div>
+    <div class="overlay-line"><label for="accuracy-filter"><input id="accuracy-filter" type="checkbox"> Limit to EPA coordinates with stated accuracy ≤100 m</label><p id="accuracy-explanation" class="analysis-note">In TRI mode, removes 52 of the 300 saved points. This filters by reported coordinate precision, not geographic clustering or pollution.</p></div>
     <div class="controls"><button id="reset" type="button" class="secondary">Clear filters</button><button type="button" id="fit">Show all markers</button></div>
     <div class="count" id="count" role="status" aria-live="polite">Loading EPA records…</div>
     <div class="legend" aria-label="Status legend">
@@ -152,6 +152,6 @@
 <script src="lib/jquery-3.3.1.min.js"></script>
 <script src="lib/jquery.csv.min.js"></script>
 <script src="lib/leaflet.js"></script>
-<script src="js/dfw-map-dual.js"></script>
+<script src="js/dfw-map-scope-v2.js"></script>
 </body>
 </html>
